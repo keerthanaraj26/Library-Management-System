@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Request History</title>
+  <link rel="stylesheet" href="../static/styles.css" />
+</head>
+<body>
+  <h2>My Book Requests</h2><br>
+
+  <table border="1" style="margin:auto;" id="historyTable">
+    <thead>
+      <tr>
+        <th>Book ID</th>
+        <th>Title</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Filled by JS -->
+    </tbody>
+  </table>
+
+  <script>
+    const studentEmail = localStorage.getItem("studentEmail") || prompt("Enter your email");
+
+    fetch(`/api/studenthistory?email=${encodeURIComponent(studentEmail)}`)
+      .then(res => res.json())
+      .then(data => {
+        const table = document.querySelector("#historyTable tbody");
+        data.history.forEach(row => {
+          table.innerHTML += `
+            <tr>
+              <td>${row.id}</td>
+              <td>${row.title}</td>
+              <td>${row.status}</td>
+            </tr>
+          `;
+        });
+      })
+      .catch(err => {
+        console.error("Failed to fetch history", err);
+        alert("Could not load your request history.");
+      });
+  </script>
+</body>
+</html>

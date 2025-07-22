@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Dashboard</title>
+  <link href="../static/styles.css" rel="stylesheet">
+  <style>
+    table { margin: auto; border-collapse: collapse; width: 80%; }
+    th, td 
+    { border: 1px solid #999; padding: 8px; text-align: center; }
+    #search 
+    { width: 300px; padding: 6px; margin: 20px auto; display: block; }
+  </style>
+</head>
+<body>
+  <h2>Student Dashboard - Book Catalogue</h2>
+
+  <input type="text" id="search" placeholder="Search by title or author" />
+
+  <table id="bookTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Count</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    </tbody>
+  </table>
+
+  <script>
+    let books = [];
+
+    fetch("/api/studentcatalogue")
+      .then(response => response.json())
+      .then(data => {
+        books = data.books || [];
+        renderTable(books);
+      });
+
+    function renderTable(data) {
+      const tbody = document.querySelector("#bookTable tbody");
+      tbody.innerHTML = "";
+
+      data.forEach(book => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${book.id}</td>
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td>${book.count}</td>
+          <td>${book.Status}</td>
+          <td><button onclick="applyForBook(${book.ID})" ${book.Status !== 'active' || book.Count <= 0 ? "disabled" : ""}>Apply</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    document.getElementById("search").addEventListener("input", function () {
+      const keyword = this.value.toLowerCase();
+      const filtered = books.filter(book =>
+        book.Title.toLowerCase().includes(keyword) ||
+        book.Author.toLowerCase().includes(keyword)
+      );
+      renderTable(filtered);
+    });
+
+    function applyForBook(bookID) {
+      const studentEmail = prompt("Enter your email");
+
+      if (!studentEmail) {
+        alert("Email is required to apply for a book.");
+        return;
+      }
+
+      fetch("/api/apply", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          book_id: bookID,
+          student: studentEmail
+        })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Apply failed");
+        return res.json();
+      })
+      .then(data => {
+        alert(data.message || "Request submitted successfully.");
+      })
+      .catch(err => {
+        console.error("Error applying:", err);
+        alert("Error applying for book");
+      });
+}
+  </script>
+</body>
+</html>

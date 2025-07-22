@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Registration</title>
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <h2>Student Registration</h2><br>
+  <form id="register" onsubmit="register(event)">
+    <input type="text" placeholder="Student Name" required><br>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Password" required><br>
+    <input type="tel" placeholder="Phone number" required><br> 
+    <button type="submit">Register</button><br>
+  </form>
+  <p><a href="/">Back to Login</a></p>
+
+  <script>
+    function register(event) {
+      event.preventDefault();
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Failed");
+        return res.json();
+      })
+      .then(data => {
+        alert(data.message);
+        window.location.href = "/";
+      })
+      .catch(() => alert("Registration failed"));
+    }
+  </script>
+</body>
+</html>

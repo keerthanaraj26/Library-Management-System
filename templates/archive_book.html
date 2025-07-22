@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Archive Book</title>
+  <link href="../static/styles.css" rel="stylesheet">
+  <script>
+    function archiveBook() {
+      const bookId = parseInt(document.getElementById("id").value);
+
+      fetch("/api/archive", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: bookId })
+      })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message || "Book archived!");
+          window.location.href = "/viewcatalogue";
+        })
+        .catch(err => alert("Error: " + err));
+    }
+  </script>
+</head>
+<body>
+  <h2>Archive Book</h2><br>
+  <form onsubmit="event.preventDefault(); archiveBook();">
+    <label>Book ID: <input type="number" id="id" value="{{.ID}}" /></label>
+    <!-- <p><strong>Title:</strong>{{.Title}}</p>
+    <p><strong>Author:</strong>{{.Author}}</p>
+    <p><strong>Count:</strong>{{.Count}}</p> -->
+    <button type="submit">Confirm Archive</button>
+  </form>
+</body>
+</html>

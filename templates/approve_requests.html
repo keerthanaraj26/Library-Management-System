@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Approve Book Requests</title>
+  <link href="../static/styles.css" rel="stylesheet">
+  <style>
+    table { margin: auto; border-collapse: collapse; }
+    th, td { border: 1px solid #999; padding: 8px; }
+  </style>
+</head>
+<body>
+  <h2>Pending Book Requests</h2><br>
+
+  <table id="requestTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Student Email</th>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- JS will insert here -->
+    </tbody>
+  </table>
+
+  <script>
+    fetch("/api/requests")
+      .then(response => response.json())
+      .then(data => {
+        const tbody = document.querySelector("#requestTable tbody");
+        data.requests.forEach(req => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${req.ID}</td>
+            <td>${req.Student}</td>
+            <td>${req.BookName}</td>
+            <td>${req.Status}</td>
+            <td><button onclick="approveRequest(${req.ID})">Approve</button></td>
+          `;
+          tbody.appendChild(row);
+        });
+      });
+
+    function approveRequest(id) {
+      fetch("/api/approve", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: id })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message);
+        location.reload(); 
+      });
+    }
+  </script>
+</body>
+</html>

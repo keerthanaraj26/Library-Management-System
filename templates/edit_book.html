@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Book</title>
+  <link href="../static/styles.css" rel="stylesheet">
+  <script>
+    function updateBook() {
+      const book = {
+        id: parseInt(document.getElementById("id").value),
+        title: document.getElementById("title").value,
+        author: document.getElementById("author").value,
+        count: parseInt(document.getElementById("count").value)
+      };
+
+      fetch("/api/edit", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(book)
+      })
+      .then(res => res.json())
+      .then(data => {
+          alert(data.message || "Book updated!");
+          window.location.href = "/viewcatalogue";
+        })
+      .catch(err => alert("Error: " + err));
+    }
+  </script>
+</head>
+<body>
+  <h2>Edit Book</h2><br>
+  <form id="editform" onsubmit="event.preventDefault(); updateBook();">
+    <input type="number" id="id" value="{{.ID}}" placeholder="Book ID" /><br>
+    <input type="text" id="title" value="{{.Title}}" placeholder="Title" required /><br>
+    <input type="text" id="author" value="{{.Author}}" placeholder="Author" required /><br>
+    <input type="number" id="count" value="{{.Count}}" placeholder="Count" required /><br>
+    <button type="submit">Update Book</button>
+  </form>
+</body>
+</html>

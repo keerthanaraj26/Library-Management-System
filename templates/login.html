@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Portal</title>
+  <link rel="stylesheet" href="../static/styles.css">
+  <style>
+    .form-container {
+      width: 300px;
+      margin: 50px auto;
+      text-align: center;
+    }
+    .form-container form {
+      display: none;
+      margin-top: 20px;
+    }
+    .form-container form.active {
+      display: block;
+    }
+    input, button {
+      display: block;
+      margin: 10px auto;
+      padding: 8px;
+      width: 90%;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div id="adminForm" class="form">
+      <h2>Admin Login</h2>
+      <input type="email" id="adminEmail" placeholder="Admin Email" />
+      <input type="password" id="adminPassword" placeholder="Password" />
+      <button onclick="adminLogin()">Admin Login</button>
+    </div>
+
+    <div id="studentForm" class="form">
+      <h2>Student Login</h2>
+      <input type="email" id="studentEmail" placeholder="Student Email" />
+      <input type="password" id="studentPassword" placeholder="Password" />
+      <button onclick="studentLogin()">Student Login</button><br>
+
+      <p><a href="/register">New student? Register here</a></p><br>
+      <p><a href="/changepassword">Forgot password? Change here</a></p>
+    </div>
+
+  </div>
+
+  <script>
+    function adminLogin() {
+      const email = document.getElementById("adminEmail").value;
+      const password = document.getElementById("adminPassword").value;
+
+      fetch("/api/login/admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        email: "admin@lib.com",
+        password: "admin123"
+        })
+      })
+    .then(res => {
+        if (!res.ok) throw new Error("Login failed");
+        return res.json();
+    })
+    .then(data => {
+        alert(data.message || "Admin login successful");
+        localStorage.setItem("adminEmail", "admin@lib.com");
+        window.location.href = "/admindashboard";
+    })
+    .catch(err => {
+        alert("Invalid admin credentials");
+        console.error("Admin login error:", err.message);
+    });
+    }
+
+  function studentLogin() {
+    const email = document.getElementById("studentEmail").value;
+    const password = document.getElementById("studentPassword").value;
+
+    fetch("/api/login/student", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("Login failed");
+      return res.json();
+    })
+    .then(data => {
+      alert(data.message);
+      localStorage.setItem("studentEmail", email);
+      window.location.href = "/studentdashboard";
+    })
+    .catch(err => {
+      alert("Invalid credentials");
+      console.error(err);
+    });
+  }
+
+
+  </script>
+</body>
+</html>

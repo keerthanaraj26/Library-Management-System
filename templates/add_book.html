@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Book Page</title>
+    <link href="../static/styles.css" rel="stylesheet">
+</head>
+<body>
+    <h2>Add New Book</h2><br>
+    <form id="bookform" onsubmit="addbook(event)">
+        <input type="number" name="id" placeholder="ID"><br>
+        <input name="title" placeholder="Title"><br>
+        <input name="author" placeholder="Author"><br>
+        <input name="count" type="number" placeholder="Count"><br>
+        <button type="submit">Add</button><br>
+    </form>
+
+    <script src="../static/scripts.js"></script>
+</body>
+</html>

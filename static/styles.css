@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f4f7f9;
+  color: #333;
+  padding: 20px;
+}
+h2{
+    text-align: center;
+}
+#bookform, #editform, #changepassword, #register{
+    display: grid;
+    justify-items: center;
+}
+input{
+    padding: 6px;
+}
+button{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: #2a92d8;
+}
+a{
+    display: flex;
+    justify-content: center;
+    padding: 4px;
+    text-decoration: none;
+}
