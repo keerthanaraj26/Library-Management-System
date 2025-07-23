@@ -52,18 +52,17 @@ func AuthRequired(role string) func(http.HandlerFunc) http.HandlerFunc {
                 http.Redirect(w, r, "/", http.StatusSeeOther)
                 return
             }
-
             var dbRole string
             err = DB.QueryRow("SELECT role FROM users WHERE email = ?", cookie.Value).Scan(&dbRole)
             if err != nil || dbRole != role {
                 http.Redirect(w, r, "/", http.StatusSeeOther)
                 return
             }
-
             next(w, r)
         }
     }
 }
+
 func AddPage(w http.ResponseWriter, r *http.Request) {
 	var tmpl = template.Must(template.ParseFiles("templates/add_book.html"))
 	tmpl.Execute(w, nil)

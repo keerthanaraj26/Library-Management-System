@@ -34,7 +34,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 		return
 	}
-
 	var user models.User
 	var query string
 
@@ -82,7 +81,6 @@ func login(w http.ResponseWriter, r *http.Request, role string) {
 		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
 		return
 	}
-	// After verifying email & password from DB:
 	http.SetCookie(w, &http.Cookie{
 		Name:  "user",
 		Value: data.Email,
