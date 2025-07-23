@@ -53,10 +53,7 @@
       fetch("/api/login/admin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-        email: "admin@lib.com",
-        password: "admin123"
-        })
+        body: JSON.stringify({ email, password })
       })
     .then(res => {
         if (!res.ok) throw new Error("Login failed");
@@ -64,7 +61,7 @@
     })
     .then(data => {
         alert(data.message || "Admin login successful");
-        localStorage.setItem("adminEmail", "admin@lib.com");
+        localStorage.setItem("adminEmail", email);
         window.location.href = "/admindashboard";
     })
     .catch(err => {

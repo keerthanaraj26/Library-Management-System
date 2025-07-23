@@ -82,6 +82,12 @@ func login(w http.ResponseWriter, r *http.Request, role string) {
 		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
 		return
 	}
+	// After verifying email & password from DB:
+	http.SetCookie(w, &http.Cookie{
+		Name:  "user",
+		Value: data.Email,
+		Path:  "/",
+	})
 
 	json.NewEncoder(w).Encode(map[string]string{
 		"message": "Login successful",

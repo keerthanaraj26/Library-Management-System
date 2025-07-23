@@ -9,20 +9,19 @@ type Book struct {
 }
 type Request struct {
 	Student string `json:"student"`
-	ID      int    `json:"id"`      
+	ID      int    `json:"id"`
 	Title   string `json:"title"`
 	Status  string `json:"status"`
 }
 
 type User struct {
 	ID       int    `json:"id"`
-	Name     string `json:"name"`    
+	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
 type Credentials struct {
-    Email    string `json:"email"`
-    Password string `json:"password"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
-

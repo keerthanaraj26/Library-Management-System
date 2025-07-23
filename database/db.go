@@ -34,6 +34,35 @@ func Init() {
 		log.Fatal("Unable to reach database:", err)
 	}
 
+	_, err = DB.Exec(`
+		INSERT INTO users (email, password, role)
+		SELECT * FROM (SELECT 'admin@lib.com', 'admin123', 'admin') AS tmp
+		WHERE NOT EXISTS (SELECT email FROM users WHERE email = 'admin@lib.com') LIMIT 1 `)
+
+	if err != nil {
+		log.Println("Error inserting default admin:", err)
+	}
+}
+
+func AuthRequired(role string) func(http.HandlerFunc) http.HandlerFunc {
+    return func(next http.HandlerFunc) http.HandlerFunc {
+        return func(w http.ResponseWriter, r *http.Request) {
+            cookie, err := r.Cookie("user")
+            if err != nil || cookie.Value == "" {
+                http.Redirect(w, r, "/", http.StatusSeeOther)
+                return
+            }
+
+            var dbRole string
+            err = DB.QueryRow("SELECT role FROM users WHERE email = ?", cookie.Value).Scan(&dbRole)
+            if err != nil || dbRole != role {
+                http.Redirect(w, r, "/", http.StatusSeeOther)
+                return
+            }
+
+            next(w, r)
+        }
+    }
 }
 func AddPage(w http.ResponseWriter, r *http.Request) {
 	var tmpl = template.Must(template.ParseFiles("templates/add_book.html"))
