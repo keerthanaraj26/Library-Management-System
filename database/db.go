@@ -3,7 +3,6 @@ package database
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -102,8 +101,6 @@ func AddBookHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Invalid JSON: "+err.Error(), http.StatusBadRequest)
 			return
 		}
-
-		fmt.Printf("Received Data: %+v\n", data)
 
 		_, err = DB.Exec(
 			`INSERT INTO books (id, title, author, count) VALUES (?, ?, ?, ?)`,

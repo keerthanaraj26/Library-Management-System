@@ -41,6 +41,8 @@ func main() {
 	http.HandleFunc("/api/apply", handlers.ApplyForBookHandler)
 	http.HandleFunc("/studenthistory", database.AuthRequired("student")(handlers.StudentHistory))
 	http.HandleFunc("/api/studenthistory", handlers.StudentHistoryHandler)
+	http.HandleFunc("/logout", handlers.Logout)
+	
 
 	log.Println("Server started at http://localhost:8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))

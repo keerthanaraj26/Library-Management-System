@@ -148,3 +148,14 @@ func ChangePasswordHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Password updated successfully"})
 }
+func Logout(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "user",
+		Path:     "/",
+		MaxAge:   -1, 
+	})
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "Logout successful",
+	})
+}
