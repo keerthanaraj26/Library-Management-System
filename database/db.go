@@ -33,8 +33,7 @@ func Init() {
 		log.Fatal("Unable to reach database:", err)
 	}
 
-	_, err = DB.Exec(`
-		INSERT INTO users (email, password, role)
+	_, err = DB.Exec(`INSERT INTO users (email, password, role)
 		SELECT * FROM (SELECT 'admin@lib.com', 'admin123', 'admin') AS tmp
 		WHERE NOT EXISTS (SELECT email FROM users WHERE email = 'admin@lib.com') LIMIT 1 `)
 
